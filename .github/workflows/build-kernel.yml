@@ -30,7 +30,7 @@ jobs:
       - name: 获取模块文件
         run: |
           # 创建父目录的vendor文件夹
-          mkdir -p ../vendor
+          mkdir ../vendor
           
           # 克隆模块仓库到临时目录
           git clone https://github.com/wu17481748/android_kernel_modules_oppo_mt6833 /tmp/modules_repo
