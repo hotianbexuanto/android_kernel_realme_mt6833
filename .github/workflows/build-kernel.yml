@@ -27,6 +27,20 @@ jobs:
           key: ${{ runner.os }}-ccache-${{ github.sha }}
           restore-keys: ${{ runner.os }}-ccache-
 
+      - name: 获取模块文件
+        run: |
+          # 创建父目录的vendor文件夹
+          mkdir -p ../vendor
+          
+          # 克隆模块仓库到临时目录
+          git clone https://github.com/wu17481748/android_kernel_modules_oppo_mt6833 /tmp/modules_repo
+          
+          # 将vendor内容复制到正确的位置
+          cp -r /tmp/modules_repo/vendor/* ../vendor/
+          
+          # 显示文件结构以确认
+          ls -la ../vendor/
+
       - name: 检查编译环境
         run: |
           # 显示系统信息
@@ -81,4 +95,4 @@ jobs:
           path: |
             arch/arm64/boot/Image.gz
             arch/arm64/boot/dtbo.img
-            AnyKernel3/ 
+            AnyKernel3/
