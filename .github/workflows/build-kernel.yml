@@ -58,7 +58,7 @@ jobs:
           export LLVM_IAS=1
           
           # 创建默认配置 - 使用MT6833的配置
-          make k6853v1_64_6360_k419_defconfig
+          make defconfig
           
           # 编译内核
           make -j$(nproc --all) CC=clang LD=ld.lld AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump READELF=llvm-readelf STRIP=llvm-strip
