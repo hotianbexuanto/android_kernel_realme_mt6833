@@ -27,20 +27,6 @@ jobs:
           key: ${{ runner.os }}-ccache-${{ github.sha }}
           restore-keys: ${{ runner.os }}-ccache-
 
-      - name: 获取模块文件
-        run: |
-          # 创建父目录的vendor文件夹
-          mkdir ../vendor
-          
-          # 克隆模块仓库到临时目录
-          git clone https://github.com/wu17481748/android_kernel_modules_oppo_mt6833 /tmp/modules_repo
-          
-          # 将vendor内容复制到正确的位置
-          cp -r /tmp/modules_repo/vendor/* ../vendor/
-          
-          # 显示文件结构以确认
-          ls -la ../vendor/
-
       - name: 检查编译环境
         run: |
           # 显示系统信息
@@ -71,6 +57,9 @@ jobs:
           export LLVM=1
           export LLVM_IAS=1
           
+          # 进入内核源码目录
+          cd Kernel
+          
           # 创建默认配置 - 使用MT6833的配置
           make defconfig
           
@@ -80,12 +69,12 @@ jobs:
       - name: 打包内核镜像
         run: |
           mkdir -p AnyKernel3
-          cp arch/arm64/boot/Image.gz AnyKernel3/
-          if [ -f arch/arm64/boot/dtbo.img ]; then
-            cp arch/arm64/boot/dtbo.img AnyKernel3/
+          cp Kernel/arch/arm64/boot/Image.gz AnyKernel3/
+          if [ -f Kernel/arch/arm64/boot/dtbo.img ]; then
+            cp Kernel/arch/arm64/boot/dtbo.img AnyKernel3/
           fi
-          if [ -d arch/arm64/boot/dts ]; then
-            find arch/arm64/boot/dts -name "*.dtb" -exec cat {} \; > AnyKernel3/dtb
+          if [ -d Kernel/arch/arm64/boot/dts ]; then
+            find Kernel/arch/arm64/boot/dts -name "*.dtb" -exec cat {} \; > AnyKernel3/dtb
           fi
 
       - name: 上传内核文件
@@ -93,6 +82,6 @@ jobs:
         with:
           name: Kernel-Files
           path: |
-            arch/arm64/boot/Image.gz
-            arch/arm64/boot/dtbo.img
-            AnyKernel3/
+            Kernel/arch/arm64/boot/Image.gz
+            Kernel/arch/arm64/boot/dtbo.img
+            AnyKernel3/ 
